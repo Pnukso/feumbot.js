@@ -1,0 +1,17 @@
+{
+  "name": "feumbot",
+  "version": "1.0.0",
+  "description": "DiscordBot for feum residents to book LQ",
+  "main": "index.js",
+  "scripts": {
+    "test": "ping"
+  },
+  "author": "FengierErnest",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.14.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0"
+  }
+}
