@@ -3,8 +3,9 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 async function generateDateButtons(currentDate, userId, guildId, getDayBookingStatus) {
     const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
     let components = [];
+    let currentRow = new ActionRowBuilder();
 
-    for (let day = 1; day <= daysInMonth && components.length < 5; day++) {
+    for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
         const dayBookingStatus = await getDayBookingStatus(date, guildId);
 
@@ -28,13 +29,16 @@ async function generateDateButtons(currentDate, userId, guildId, getDayBookingSt
                 .setStyle(style)
                 .setDisabled(disabled);
 
-            // Calculate index for organizing buttons into action rows, with a maximum of 5 rows
-            const index = Math.floor((day - 1) / 5);
-            if (!components[index]) components[index] = new ActionRowBuilder();
-            if (components[index].components.length < 5) {
-                components[index].addComponents(button);
+            if (currentRow.components.length < 5) {
+                currentRow.addComponents(button);
+            } else {
+                components.push(currentRow);
+                currentRow = new ActionRowBuilder().addComponents(button);
             }
         }
+    }
+    if (currentRow.components.length > 0) {
+        components.push(currentRow);
     }
 
     return components.slice(0, 5);

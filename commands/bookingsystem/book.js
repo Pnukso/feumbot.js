@@ -16,7 +16,11 @@ module.exports = {
             const components = await generateDateButtons(currentDate,
                 userId, guildId, BookingStatus.getDayBookingStatus);
 
-            await interaction.reply({ content: 'Select a date for your reservation:', components });
+            const validComponents = components.filter(c => c !== null);
+            await interaction.reply({
+                content: 'Select a date for your reservation:',
+                components: validComponents.map(component => component.toJSON()),
+            });
         } else {
             await interaction.reply('You do not have permission to use this command.');
         }
