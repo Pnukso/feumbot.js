@@ -3,9 +3,17 @@ const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+	],
+});
 
 client.commands = new Collection();
+client.buttonHandlers = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
@@ -21,6 +29,14 @@ for (const folder of commandFolders) {
 			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 		}
 	}
+}
+
+const buttonHandlersPath = path.join(__dirname, 'buttonHandlers');
+const buttonHandlerFiles = fs.readdirSync(buttonHandlersPath).filter(file => file.endsWith('.js'));
+for (const file of buttonHandlerFiles) {
+	const filePath = path.join(buttonHandlersPath, file);
+	const buttonHandler = require(filePath);
+	client.buttonHandlers.set(buttonHandler.name, buttonHandler);
 }
 
 const eventsPath = path.join(__dirname, 'events');

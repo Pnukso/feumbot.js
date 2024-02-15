@@ -5,7 +5,7 @@ async function generateDateButtons(currentDate, userId, guildId, getDayBookingSt
     let components = [];
     let currentRow = new ActionRowBuilder();
 
-    for (let day = 1; day <= daysInMonth; day++) {
+    for (let day = 1; day <= daysInMonth + 1; day++) {
         const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
         const dayBookingStatus = await getDayBookingStatus(date, guildId);
 
@@ -24,8 +24,8 @@ async function generateDateButtons(currentDate, userId, guildId, getDayBookingSt
 
         if (date >= new Date()) {
             const button = new ButtonBuilder()
-                .setCustomId(`reserve_date_${date.toISOString().slice(0, 10)}_${userId}`)
-                .setLabel(day.toString())
+                .setCustomId(`book_date_${date.toISOString().slice(0, 10)}_${userId}`)
+                .setLabel((day - 1).toString())
                 .setStyle(style)
                 .setDisabled(disabled);
 
