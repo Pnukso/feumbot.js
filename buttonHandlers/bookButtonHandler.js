@@ -1,3 +1,6 @@
+const { generateHourButtons } = require('../models/dateButtons');
+const BookingStatus = require('../models/database/BookingStatus');
+
 module.exports = {
     name: 'book',
     async execute(interaction, customIdParts) {
@@ -13,9 +16,12 @@ module.exports = {
     },
 
     async handleDateMenu(interaction, buttonDate, userId) {
+
+        const components = await generateHourButtons(interaction, buttonDate, userId, BookingStatus.getAllBookingsForDate());
+
         await interaction.update({
-            content: `Button with date ${buttonDate} been clicked by user with id ${userId}`,
-            components: [],
+            content: `Select hour of your ${buttonDate} booking!`,
+            components: components.map(component => component.toJSON()),
         });
     },
 };
