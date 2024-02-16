@@ -49,6 +49,36 @@ class BookingStatus {
             throw err;
         }
     }
+    static async getHourAvailability(selectedDate, selectedHour, guildId) {
+        const bookings = [];
+        const query = `
+            SELECT hour, duration, bookingtype, date, username, booking_id, user_id, slot, guild_id
+            FROM bookings
+            WHERE date = $1 AND guild_id = $2 AND hour = $3;
+        `;
+
+        try {
+            const { rows } = await pool.query(query, [selectedDate, guildId, selectedHour]);
+            rows.forEach(row => {
+                bookings.push({
+                    Hour: row.hour,
+                    Duration: row.duration,
+                    BookingType: row.bookingtype,
+                    Date: row.date,
+                    Username: row.username,
+                    BookingId: row.booking_id,
+                    UserId: row.user_id,
+                    Slot: row.slot,
+                    GuildId: row.guild_id,
+                });
+            });
+            return bookings;
+        } catch (err) {
+            console.error('Error fetching bookings for date.', err.stack);
+            throw err;
+        }
+    }
+
 }
 
 module.exports = BookingStatus;

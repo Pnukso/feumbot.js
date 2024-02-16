@@ -59,7 +59,7 @@ async function generateHourButtons(interaction, selectedDate, userId, getAllBook
         const startHour = parseInt(booking.hour.split(':')[0]);
         hourSlotAvailability[startHour] = false; // Mark start hour as unavailable
 
-        const durationInHours = booking.duration / 60; // Assuming duration is in minutes
+        const durationInHours = booking.duration / 60;
         for (let i = 1; i < durationInHours; i++) {
             hourSlotAvailability[startHour + i] = false; // Mark affected hours as unavailable
         }
@@ -70,8 +70,8 @@ async function generateHourButtons(interaction, selectedDate, userId, getAllBook
 
     for (let hour = 8; hour <= 22; hour++) {
         const hourLabel = `${hour}:00`;
-        const customId = `book_hour_${selectedDate}_${hour}_${userId}`;
-        const style = hourSlotAvailability[hour] ? ButtonStyle.Primary : ButtonStyle.Danger;
+        const customId = `book_hour_${selectedDate}_${userId}_${hour}`;
+        const style = hourSlotAvailability[hour] ? ButtonStyle.Secondary : ButtonStyle.Danger;
         const disabled = !hourSlotAvailability[hour];
 
         const button = new ButtonBuilder()
