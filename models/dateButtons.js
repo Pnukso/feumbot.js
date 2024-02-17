@@ -1,11 +1,12 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { formatDateToDDMMYY } = require('../models/utility/dateFormatter');
 
 async function generateDateButtons(currentDate, userId, guildId, getDayBookingStatus) {
     const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
     let components = [];
     let currentRow = new ActionRowBuilder();
 
-    for (let day = 1; day <= daysInMonth + 1; day++) {
+    for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
         const dayBookingStatus = await getDayBookingStatus(date, guildId);
 
@@ -24,8 +25,8 @@ async function generateDateButtons(currentDate, userId, guildId, getDayBookingSt
 
         if (date >= new Date()) {
             const button = new ButtonBuilder()
-                .setCustomId(`book_date_${date.toISOString().slice(0, 10)}_${userId}`)
-                .setLabel((day - 1).toString())
+                .setCustomId(`book_date_${await formatDateToDDMMYY(date)}_${userId}`)
+                .setLabel((day).toString())
                 .setStyle(style)
                 .setDisabled(disabled);
 
